@@ -6,6 +6,14 @@
 `default_nettype none
 
 module tt_um_example (
+parameter SIGN_BITS = 1,           // Sign bit count (always 1 for IEEE 754)
+parameter EXP_BITS = 8,           // Number of exponent bits
+parameter MANTISSA_BITS = 23,     // Number of mantissa bits
+parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
+)(
+//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] A, // Input operand A
+//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] B, // Input operand B
+//output [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] P // Product
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -14,17 +22,6 @@ module tt_um_example (
     input  wire       ena,      // always 1 when the design is powered, so you can ignore it
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
-);
-
-
-        parameter SIGN_BITS = 1,           // Sign bit count (always 1 for IEEE 754)
-parameter EXP_BITS = 8,           // Number of exponent bits
-parameter MANTISSA_BITS = 23,     // Number of mantissa bits
-parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
-)(
-input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] A, // Input operand A
-input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] B, // Input operand B
-output [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] P // Product
 );
 
 // Internal signals
