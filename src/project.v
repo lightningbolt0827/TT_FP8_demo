@@ -1,19 +1,21 @@
 /*
  * Copyright (c) 2024 Your Name
- * SPDX-License-Identifier: Apache-2.0
+ * Suo_outDX-License-Identifier: Apache-2.0
  */
 
 `default_nettype none
 
 module tt_um_example (
 parameter SIGN_BITS = 1,           // Sign bit count (always 1 for IEEE 754)
-parameter EXP_BITS = 8,           // Number of exponent bits
-parameter MANTISSA_BITS = 23,     // Number of mantissa bits
+parameter EXP_BITS = 4,           // Number of exponent bits
+parameter MANTISSA_BITS = 3,     // Number of mantissa bits
 parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
 )(
-//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] A, // Input operand A
-//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] B, // Input operand B
-//output [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] P // Product
+    
+//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] ui_in, // Input operand ui_in
+//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] uio_in, // Input operand uio_in
+//output [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] uo_out // Product
+    
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -29,13 +31,13 @@ wire [MANTISSA_BITS-1:0] Mout;
 wire [EXP_BITS-1:0] Eout;
 wire Sout;
 
-wire [MANTISSA_BITS-1:0] Ma = A[MANTISSA_BITS-1:0];
-wire [EXP_BITS-1:0] Ea = A[(MANTISSA_BITS + EXP_BITS - 1):MANTISSA_BITS];
-wire Sa = A[(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1)];
+wire [MANTISSA_BITS-1:0] Ma = ui_in[MANTISSA_BITS-1:0];
+wire [EXP_BITS-1:0] Ea = ui_in[(MANTISSA_BITS + EXP_BITS - 1):MANTISSA_BITS];
+wire Sa = ui_in[(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1)];
 
-wire [MANTISSA_BITS-1:0] Mb = B[MANTISSA_BITS-1:0];
-wire [EXP_BITS-1:0] Eb = B[(MANTISSA_BITS + EXP_BITS - 1):MANTISSA_BITS];
-wire Sb = B[(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1)];
+wire [MANTISSA_BITS-1:0] Mb = uio_in[MANTISSA_BITS-1:0];
+wire [EXP_BITS-1:0] Eb = uio_in[(MANTISSA_BITS + EXP_BITS - 1):MANTISSA_BITS];
+wire Sb = uio_in[(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1)];
 
 assign Sout = Sa ^ Sb;
 
@@ -51,9 +53,9 @@ nand (Ce, N1, N3);
 
 assign Eout = Ea + Eb - BIAS - Ce;
 assign Mout = M1addout[MANTISSA_BITS] ? {M1addout[MANTISSA_BITS-2:0], 1'b0} : M1addout[MANTISSA_BITS-1:0];
-assign P = {Sout, Eout, Mout};
+assign uo_out = {Sout, Eout, Mout};
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  //assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
   assign uio_out = 0;
   assign uio_oe  = 0;
 
