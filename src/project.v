@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tt_um_lightFP8 (
 parameter SIGN_BITS = 1,           // Sign bit count (always 1 for IEEE 754)
 parameter EXP_BITS = 4,           // Number of exponent bits
 parameter MANTISSA_BITS = 3,     // Number of mantissa bits
