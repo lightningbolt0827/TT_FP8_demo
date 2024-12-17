@@ -11,11 +11,7 @@ parameter EXP_BITS = 4,           // Number of exponent bits
 parameter MANTISSA_BITS = 3,     // Number of mantissa bits
 parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
 )(
-    
-//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] ui_in, // Input operand ui_in
-//input  [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] uio_in, // Input operand uio_in
-//output [(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1):0] uo_out // Product
-    
+        
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -26,6 +22,14 @@ parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
     input  wire       rst_n     // reset_n - low to reset
 );
 
+// All output pins must be assigned. If not used, assign to 0.
+//assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+assign uio_out = 0;
+assign uio_oe  = 0;
+
+// List all unused inputs to prevent warnings
+wire _unused = &{ena, clk, rst_n, 1'b0};
+    
 // Internal signals
 wire [MANTISSA_BITS-1:0] Mout;
 wire [EXP_BITS-1:0] Eout;
@@ -54,12 +58,4 @@ nand (Ce, N1, N3);
 assign Eout = Ea + Eb - BIAS - Ce;
 assign Mout = M1addout[MANTISSA_BITS] ? {M1addout[MANTISSA_BITS-2:0], 1'b0} : M1addout[MANTISSA_BITS-1:0];
 assign uo_out = {Sout, Eout, Mout};
-  // All output pins must be assigned. If not used, assign to 0.
-  //assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
-
-  // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
-
 endmodule
