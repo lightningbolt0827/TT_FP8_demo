@@ -11,7 +11,7 @@ parameter MANTISSA_BITS = 3,     // Number of mantissa bits
 parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
 )(
         input wire [7:0] ui_in, // Input operand ui_in
-        output wire [7:0] uo_out // Product
+        output wire [7:0] uo_out, // Product
         input wire [7:0] uio_in, // Input operand uio_in
         output wire [7:0] uio_out,  // IOs: Output path
         output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
