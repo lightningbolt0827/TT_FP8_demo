@@ -71,8 +71,8 @@ module tb ();
     ui_in_reg = 8'b00000111; // 7
     uio_in_reg = 8'b00000010; // 2
     #20;
-    ui_in_reg = 8'b00000000; // 0
-    uio_in_reg = 8'b00000000; // 0
+    ui_in_reg = 8'b00000010; // 0
+    uio_in_reg = 8'b00010000; // 0
     #20;
     ui_in_reg = 8'b00000001; // 1
     uio_in_reg = 8'b00000001; // 1
