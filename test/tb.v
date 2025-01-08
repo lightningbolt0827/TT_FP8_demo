@@ -6,7 +6,7 @@
 */
 module tb ();
 
-  // Dump the signals to a VCD file. You can view it with gtkwave or surfer.
+  // Dump the signals to a VCD file. You can view it with gtkwave.
   initial begin
     $dumpfile("tb.vcd");
     $dumpvars(0, tb);
@@ -17,23 +17,21 @@ module tb ();
   reg clk;
   reg rst_n;
   reg ena;
-  reg [7:0] ui_in;
-  reg [7:0] uio_in;
+  wire [7:0] ui_in;
+  wire [7:0] uio_in;
+  reg [7:0] ui_in_reg;
+  reg [7:0] uio_in_reg;
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
-`ifdef GL_TEST
-  wire VPWR = 1'b1;
-  wire VGND = 1'b0;
-`endif
 
-  // Instantiate the module under test (MUT):
-  tt_um_lightFP8 user_project (
-      
+  // Replace tt_um_example with your module name:
+  tt_um_mac user_project (
+
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
-      .VPWR(VPWR),
-      .VGND(VGND),
+      .VPWR(1'b1),
+      .VGND(1'b0),
 `endif
 
       .ui_in  (ui_in),    // Dedicated inputs
@@ -46,8 +44,7 @@ module tb ();
       .rst_n  (rst_n)     // not reset
   );
 
-
-// Assign values to the wire type inout signals
+  // Assign values to the wire type inout signals
   assign ui_in = ui_in_reg;
   assign uio_in = uio_in_reg;
 
@@ -74,8 +71,8 @@ module tb ();
     ui_in_reg = 8'b00000111; // 7
     uio_in_reg = 8'b00000010; // 2
     #20;
-    ui_in_reg = 8'b00000100; // not0
-    uio_in_reg = 8'b00000100; // not0
+    ui_in_reg = 8'b00000000; // 0
+    uio_in_reg = 8'b00000000; // 0
     #20;
     ui_in_reg = 8'b00000001; // 1
     uio_in_reg = 8'b00000001; // 1
@@ -87,4 +84,5 @@ module tb ();
   initial begin
     $monitor("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
   end
+
 endmodule
