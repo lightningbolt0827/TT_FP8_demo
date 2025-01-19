@@ -1,62 +1,112 @@
 /*
- * Couo_outyright (c) 2024 Your Nui_inme
- * Suo_outDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2024 Your Name
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 `default_nettype none
-module tt_um_lightFP8 #(
-parameter SIGN_BITS = 1,           // Sign bit count (always 1 for IEEE 754)
-parameter EXP_BITS = 4,           // Number of exponent bits
-parameter MANTISSA_BITS = 3,     // Number of mantissa bits
-parameter BIAS = (1 << (EXP_BITS - 1)) - 1 // Bias for the exponent
-)(
-        input wire [7:0] ui_in, // Input operand ui_in
-        output wire [7:0] uo_out, // Product
-        input wire [7:0] uio_in, // Input operand uio_in
-        output wire [7:0] uio_out,  // IOs: Output path
-        output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-        input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-        input  wire       clk,      // clock
-        input  wire       rst_n     // reset_n - low to reset
-        
+
+module tt_um_logarithmic_afpm (
+    input  wire [7:0] ui_in,    // 8-bit input
+    output wire [7:0] uo_out,   // 8-bit output
+    input  wire [7:0] uio_in,   // IOs: Input path
+    output wire [7:0] uio_out,  // IOs: Output path (not used)
+    output wire [7:0] uio_oe,   // IOs: Enable path (not used)
+    input  wire       ena,      // Enable signal
+    input  wire       clk,      // Clock signal
+    input  wire       rst_n     // Reset signal
 );
-// All output pins must be assigned. If not used, assign to 0.
-//assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-assign uio_out = 0;
-assign uio_oe  = 0;
 
-// List all unused inputs to prevent warnings
-wire _unused = &{ena, clk, rst_n, 1'b0};
-    
+    // State Encoding
+    localparam IDLE       = 2'b00,
+               COLLECT    = 2'b01,
+               PROCESS    = 2'b10;
+
+    reg [1:0] state;                // FSM state register
+    reg [15:0] A, B;                // 16-bit registers for operands
+    reg [15:0] result;              // 16-bit result register
+    reg [1:0] byte_count;           // Counter to track byte collection
+    reg        processing_done;     // Flag indicating completion of processing
+
+    // Assign unused signals
+    assign uio_out = 0;
+    assign uio_oe  = 0;
+    // List all unused inputs to prevent warnings
+    wire _unused = &{ena, 1'b0}; 
+
         
-// Internal signals
-wire [MANTISSA_BITS-1:0] Mout;
-wire [EXP_BITS-1:0] Eout;
-wire Sout;
+    // FSM Implementation
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            // Reset logic
+            state <= IDLE;
+            A <= 0;
+            B <= 0;
+            result <= 0;
+            byte_count <= 0;
+            processing_done <= 0;
+        end else if (ena) begin
+            case (state)
+                IDLE: begin
+                    byte_count <= 0;
+                    processing_done <= 0;
+                    state <= COLLECT;
+                end
+                COLLECT: begin
+                    if (byte_count < 2) begin
+                        A[byte_count*8 +: 8] <= ui_in;  // Collect 8 bits of operand A from ui_in
+                        B[byte_count*8 +: 8] <= uio_in; // Collect 8 bits of operand B from uio_in
+                        byte_count <= byte_count + 1;
+                    end
+                    if (byte_count == 2) begin
+                        byte_count <= 0;
+                        state <= PROCESS;
+                    end
+                end
+                PROCESS: begin
+                    // Extract sign, exponent, and mantissa for 16-bit floating-point numbers
+                    wire [9:0] Ma = A[9:0];
+                    wire [4:0] Ea = A[14:10];
+                    wire       Sa = A[15];
 
-wire [MANTISSA_BITS-1:0] Ma = ui_in[MANTISSA_BITS-1:0];
-wire [EXP_BITS-1:0] Ea = ui_in[(MANTISSA_BITS + EXP_BITS - 1):MANTISSA_BITS];
-wire Sa = ui_in[(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1)];
+                    wire [9:0] Mb = B[9:0];
+                    wire [4:0] Eb = B[14:10];
+                    wire       Sb = B[15];
 
-wire [MANTISSA_BITS-1:0] Mb = uio_in[MANTISSA_BITS-1:0];
-wire [EXP_BITS-1:0] Eb = uio_in[(MANTISSA_BITS + EXP_BITS - 1):MANTISSA_BITS];
-wire Sb = uio_in[(SIGN_BITS + EXP_BITS + MANTISSA_BITS - 1)];
+                    wire Sout = Sa ^ Sb;  // Sign of the result
 
-assign Sout = Sa ^ Sb;
+                    // Normalize mantissas (implicit leading 1)
+                    wire [10:0] M1aout = {1'b1, Ma};
+                    wire [10:0] M1bout = {1'b1, Mb};
+                    wire [10:0] M1addout = M1aout + M1bout;
 
-wire [MANTISSA_BITS:0] M1aout = Ma[MANTISSA_BITS-1] ? {2'b11, Ma[MANTISSA_BITS-1:1]} : {1'b0, Ma};
-wire [MANTISSA_BITS:0] M1bout = Mb[MANTISSA_BITS-1] ? {2'b11, Mb[MANTISSA_BITS-1:1]} : {1'b0, Mb};
-wire [MANTISSA_BITS:0] M1addout = M1aout + M1bout;
+                    // Compute carry for exponent adjustment
+                    wire Ce = M1addout[10];
 
-wire N1, N2, N3, Ce;
+                    // Compute result exponent and mantissa
+                    wire [4:0] Eout = Ea + Eb - 15 + Ce;  // Exponent bias is 15 for 16-bit
+                    wire [9:0] Mout = Ce ? M1addout[10:1] : M1addout[9:0];
 
-assign N1 = ~(Ma[MANTISSA_BITS-1] & Mb[MANTISSA_BITS-1]);
-assign N2 = ~(Ma[MANTISSA_BITS-1] | Mb[MANTISSA_BITS-1]);
-assign N3 = ~((~N2) & (~M1addout[MANTISSA_BITS]));
-assign Ce = ~(N1 & N3);
+                    // Combine sign, exponent, and mantissa
+                    result <= {Sout, Eout, Mout};
+                    processing_done <= 1;
+                    state <= IDLE;
+                end
+            endcase
+        end
+    end
 
-assign Eout = Ea + Eb - BIAS +Ce;
-assign Mout = M1addout[MANTISSA_BITS] ? {M1addout[MANTISSA_BITS-2:0], 1'b0} : M1addout[MANTISSA_BITS-1:0];
-assign uo_out = {Sout, Eout, Mout};
+    // Output Result Byte by Byte
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            uo_out <= 0;
+        end else if (processing_done) begin
+            uo_out <= result[byte_count*8 +: 8];
+            byte_count <= byte_count + 1;
+            if (byte_count == 1) begin
+                processing_done <= 0;
+                byte_count <= 0;
+            end
+        end
+    end
 
 endmodule
