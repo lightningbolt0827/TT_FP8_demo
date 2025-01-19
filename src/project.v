@@ -32,7 +32,7 @@ module tt_um_logarithmic_afpm (
     assign uio_oe  = 8'b0;
 
     // Prevent warnings for unused inputs
-    wire _unused = &{ena, 1'b0}; 
+    wire _unused_ok = &{ena, clk, rst_n};
 
     // Declare wires for extracted fields
     wire [9:0] Ma, Mb;
