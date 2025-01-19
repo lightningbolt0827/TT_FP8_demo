@@ -13,8 +13,7 @@ module tt_um_logarithmic_afpm (
     output wire [7:0] uio_oe,   // IOs: Enable path (not used)
     input  wire       ena,      // Enable signal
     input  wire       clk,      // Clock signal
-    input  wire       rst_n,    // Reset signal
-    output wire       processing_done  // Explicitly declared
+    input  wire       rst_n     // Reset signal
 );
 
     // State Encoding
@@ -119,8 +118,5 @@ module tt_um_logarithmic_afpm (
             end
         end
     end
-
-    // Explicitly drive the processing_done signal
-    assign processing_done = processing_done_flag;
 
 endmodule
