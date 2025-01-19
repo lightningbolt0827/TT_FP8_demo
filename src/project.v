@@ -76,12 +76,12 @@ module tt_um_logarithmic_afpm (
             B <= 16'b0;
             result <= 16'b0;
             byte_count <= 2'b0;
-            processing_done_flag <= 1'b0; // Set to 0 during reset
+            processing_done_flag <= 1'b0; // Reset flag on reset
         end else if (ena) begin
             case (state)
                 IDLE: begin
                     byte_count <= 2'b0;
-                    processing_done_flag <= 1'b0; // Reset flag to 0 in IDLE state
+                    processing_done_flag <= 1'b0; // Reset flag in IDLE state
                     state <= COLLECT;
                 end
                 COLLECT: begin
@@ -103,6 +103,14 @@ module tt_um_logarithmic_afpm (
                 end
             endcase
         end
+    end
+
+    // Single driver for processing_done_flag using a D flip-flop
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            processing_done_flag <= 1'b0;  // Reset to 0 on reset
+        else if (ena)
+            processing_done_flag <= processing_done_flag; // No extra logic, simple register
     end
 
     // Output Result Byte by Byte
