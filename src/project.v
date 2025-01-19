@@ -76,12 +76,12 @@ module tt_um_logarithmic_afpm (
             B <= 16'b0;
             result <= 16'b0;
             byte_count <= 2'b0;
-            processing_done_flag <= 1'b0;
+            processing_done_flag <= 1'b0; // Set to 0 during reset
         end else if (ena) begin
             case (state)
                 IDLE: begin
                     byte_count <= 2'b0;
-                    processing_done_flag <= 1'b0;
+                    processing_done_flag <= 1'b0; // Reset flag to 0 in IDLE state
                     state <= COLLECT;
                 end
                 COLLECT: begin
@@ -98,7 +98,7 @@ module tt_um_logarithmic_afpm (
                 PROCESS: begin
                     // Combine sign, exponent, and mantissa
                     result <= {Sout, Eout, Mout};
-                    processing_done_flag <= 1'b1;
+                    processing_done_flag <= 1'b1; // Flag processing as done
                     state <= IDLE;
                 end
             endcase
@@ -113,7 +113,7 @@ module tt_um_logarithmic_afpm (
             uo_out <= result[byte_count*8 +: 8];
             byte_count <= byte_count + 1;
             if (byte_count == 1) begin
-                processing_done_flag <= 1'b0;
+                processing_done_flag <= 1'b0; // Reset flag once processing is done
                 byte_count <= 2'b0;
             end
         end
