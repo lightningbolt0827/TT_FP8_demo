@@ -25,11 +25,12 @@ module tt_um_logarithmic_afpm (
     reg [15:0] A, B;                // 16-bit registers for operands
     reg [15:0] result;              // 16-bit result register
     reg [1:0] byte_count;           // Counter to track byte collection
-    reg        processing_done;     // Flag indicating completion of processing
+    reg        processing_done_flag; // Internal processing completion flag
 
     // Assign unused signals
     assign uio_out = 8'b0;
     assign uio_oe  = 8'b0;
+
     // Prevent warnings for unused inputs
     wire _unused = &{ena, 1'b0}; 
 
@@ -75,12 +76,12 @@ module tt_um_logarithmic_afpm (
             B <= 16'b0;
             result <= 16'b0;
             byte_count <= 2'b0;
-            processing_done <= 1'b0;
+            processing_done_flag <= 1'b0;
         end else if (ena) begin
             case (state)
                 IDLE: begin
                     byte_count <= 2'b0;
-                    processing_done <= 1'b0;
+                    processing_done_flag <= 1'b0;
                     state <= COLLECT;
                 end
                 COLLECT: begin
@@ -97,7 +98,7 @@ module tt_um_logarithmic_afpm (
                 PROCESS: begin
                     // Combine sign, exponent, and mantissa
                     result <= {Sout, Eout, Mout};
-                    processing_done <= 1'b1;
+                    processing_done_flag <= 1'b1;
                     state <= IDLE;
                 end
             endcase
@@ -108,14 +109,19 @@ module tt_um_logarithmic_afpm (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             uo_out <= 8'b0;
-        end else if (processing_done) begin
+        end else if (processing_done_flag) begin
             uo_out <= result[byte_count*8 +: 8];
             byte_count <= byte_count + 1;
             if (byte_count == 1) begin
-                processing_done <= 1'b0;
+                processing_done_flag <= 1'b0;
                 byte_count <= 2'b0;
             end
         end
     end
 
+    // Output processing_done signal
+    wire processing_done;
+    assign processing_done = processing_done_flag;
+
 endmodule
+
