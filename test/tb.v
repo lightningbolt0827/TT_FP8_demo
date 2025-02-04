@@ -73,7 +73,7 @@ module tb ();
         for (i = 0; i < 2; i = i + 1) begin
             ui_in  = A[i*8 +: 8]; 
             uio_in = B[i*8 +: 8]; 
-            #(2*c);
+           #(20);
         end
 
         // Wait for processing
