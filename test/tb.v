@@ -75,8 +75,8 @@ module tb ();
 
         // Apply Inputs
         for (i = 0; i < 2; i = i + 1) begin
-            ui_in  = A[i*8 +: 8]; 
-            uio_in = B[i*8 +: 8]; 
+            ui_in_reg  = A[i*8 +: 8]; 
+            uio_in_reg = B[i*8 +: 8]; 
            #(20);
         end
 
