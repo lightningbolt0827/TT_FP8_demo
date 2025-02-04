@@ -50,7 +50,11 @@ module tb ();
   // Assign values to the wire-type inout signals
   assign ui_in = ui_in_reg;
   assign uio_in = uio_in_reg;
-
+   
+  reg [15:0] A, B; // 32-bit operands
+  reg [15:0] expected_result; // Expected result
+  integer i;
+   
   // Clock generation
   initial begin
     clk = 0;
