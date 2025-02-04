@@ -111,15 +111,13 @@ module tt_um_logarithmic_afpm (
 			state = OUTPUT;
 		end
 		OUTPUT: begin
-			uo_out = result[byte_count*8 +: 8];
-			byte_count = byte_count + 1;
-			if (byte_count == 2) 
-			begin
-				processing_done = 0;
-				byte_count = 0;
-				state=IDLE;
+			if (byte_count < 2)
+			  begin
+			  	uo_out = result[byte_count*8 +: 8];
+				byte_count = byte_count + 1;
+			  end	
 			end
-		end	
+
     		endcase
         end
         end
