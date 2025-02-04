@@ -79,7 +79,10 @@ module tb ();
             uio_in_reg = B[i*8 +: 8]; 
            #(20);
         end
-        // **************** TEST CASE 1 ****************  
+
+     #50
+     
+        // **************** TEST CASE 2 ****************  
         // Example Inputs (Floating-Point)
         A = 16'h3e00; //
         B = 16'h4200; //
