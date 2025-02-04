@@ -32,7 +32,7 @@ module tb ();
   `endif
 
   // Instantiate the module under test (Replace tt_um_lightFP8 with your module name)
-  tt_um_lightFP8 user_project (
+  tt_um_logarithmic_afpm user_project (
       `ifdef GL_TEST
       .VPWR(VPWR), // Power
       .VGND(VGND), // Ground
@@ -60,8 +60,8 @@ module tb ();
   // Stimulus generation
   initial begin
     rst_n = 0;  
-    ui_in_reg = 8'b0000000000000000;
-    uio_in_reg = 8'b0000000000000000;
+    ui_in_reg = 8'b00000000;
+    uio_in_reg = 8'b00000000;
     #100;
     ui_in_reg = 16'h3e00;
     uio_in_reg = 16'h4200;
