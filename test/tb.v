@@ -62,11 +62,22 @@ module tb ();
     rst_n = 0;  
     ui_in_reg = 8'b00000000;
     uio_in_reg = 8'b00000000;
-    #100;
-    ui_in_reg = 16'h3e00;
-    uio_in_reg = 16'h4200;
-    #50;
-    $stop;
+     #(20) rst_n = 1; // Release reset after some time
+
+        // **************** TEST CASE 1 ****************  
+        // Example Inputs (Floating-Point)
+        A = 16'h3e00; //
+        B = 16'h4200; //
+
+        // Apply Inputs
+        for (i = 0; i < 2; i = i + 1) begin
+            ui_in  = A[i*8 +: 8]; 
+            uio_in = B[i*8 +: 8]; 
+            #(2*c);
+        end
+
+        // Wait for processing
+     #(40);
   end
 
   // Monitor the signals during simulation
