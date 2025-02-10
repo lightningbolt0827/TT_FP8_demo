@@ -58,9 +58,9 @@ module tt_um_logarithmic_afpm (
 			byte_count = 0;
 			processing_done = 0;
 			uo_out = 8'bz;
-        	end 
-        else
-        begin
+    end 
+  else
+    begin
 		case (state)
 		IDLE: begin
 		    byte_count = 0;
@@ -98,10 +98,11 @@ module tt_um_logarithmic_afpm (
 			:(Mb[10-2]?{(Mb+(Mb>>2))}
 			:{(Mb+(Mb>>2)+(Mb>>4))});
 			M1addout[10:0] = M1aout + M1bout;
-			N1=~(Ma[9]&&Mb[9]); //nand (N1, Ma[22], Mb[22]);
-			N2=~(Ma[9]||Mb[9]); //nor  (N2, Ma[10-1], Mb[10-1]);
-			N3=N2||M1addout[10];  //or   (N3, N2, M1addout[10]);
-			Ce=~(N1&N3);          //nand (Ce, N1, N3);
+			//N1=~(Ma[9]&&Mb[9]); //nand (N1, Ma[22], Mb[22]);
+			//N2=~(Ma[9]||Mb[9]); //nor  (N2, Ma[10-1], Mb[10-1]);
+			//N3=N2||M1addout[10];  //or   (N3, N2, M1addout[10]);
+			//Ce=~(N1&N3);          //nand (Ce, N1, N3);
+			Ce=M1addout[10];
 			Eout = Ea + Eb - 15 +Ce;
 			Mout = M1addout[10-1] ?
 			(M1addout[10-1:0]+(M1addout[10-1:0]>>3)+(M1addout[10-1:0]>>5)+(M1addout[10-1:0]>>6))+(10'b1101 << 19):
@@ -113,12 +114,11 @@ module tt_um_logarithmic_afpm (
 		OUTPUT: begin
 			if (byte_count < 2)
 			  begin
-			  	uo_out = result[byte_count*8 +: 8];
-				byte_count = byte_count + 1;
+				  uo_out = result[byte_count*8 +: 8];
+				  byte_count = byte_count + 1;
 			  end	
 			end
-
-    		endcase
-        end
-        end
+    endcase
+  end
+ end
 endmodule
