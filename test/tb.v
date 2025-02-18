@@ -126,7 +126,13 @@ initial begin
     #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
     #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
     #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
-   
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
 end
 
 
