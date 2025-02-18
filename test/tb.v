@@ -100,11 +100,34 @@ module tb ();
 
   // Monitor the signals during simulation
   initial begin
-     forever
-        begin
     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
     #10
-        end
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
+     $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+    #10
   end
 
 endmodule
