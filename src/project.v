@@ -58,10 +58,10 @@ always @(posedge clk)
 			state <= IDLE;
 			A <= 16'b0;
 			B <= 16'b0;
-			result <= 16'bz;
+			result <= 16'b0;
 			byte_count <= 0;
 			processing_done <= 0;
-			uo_out <= 8'bz;
+			uo_out <= 8'b0;
         	end 
         else
         	begin
