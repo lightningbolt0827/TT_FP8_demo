@@ -95,7 +95,7 @@ module tb ();
         end
 
         // Wait for processing
-     #(40);
+     #(60);
   end
 
   // Monitor the signals during simulation
