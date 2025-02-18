@@ -58,7 +58,7 @@ module tb ();
   // Clock generation
   initial begin
     clk = 0;
-    forever #5 clk = ~clk;  
+    forever #10 clk = ~clk;  
   end
 
   // Stimulus generation
