@@ -66,7 +66,8 @@ module tb ();
     rst_n = 0;  
     ui_in_reg = 8'b00000000;
     uio_in_reg = 8'b00000000;
-     #(20) rst_n = 1; // Release reset after some time
+     #2
+     #18 rst_n = 1; // Release reset after some time
      
         /**************** TEST CASE 1 ****************  
         // Example Inputs (Floating-Point)
