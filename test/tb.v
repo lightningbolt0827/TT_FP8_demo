@@ -100,8 +100,8 @@ module tb ();
 
   // Monitor the signals during simulation
 initial begin
-    $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
-    forever #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b", $time, ui_in, uio_in, uo_out);
+   $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst-n);
+   forever #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
 end
 
 
