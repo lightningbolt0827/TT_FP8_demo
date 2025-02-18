@@ -20,7 +20,7 @@ async def test_project(dut):
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
+    await ClockCycles(dut.clk, 1)
     dut.rst_n.value = 1
 
     dut._log.info("Test project behavior")
@@ -35,7 +35,7 @@ async def test_project(dut):
     dut.ui_in.value = 0x3E
     dut.uio_in.value = 0x42
 
-    await ClockCycles(dut.clk, 2)
+    await ClockCycles(dut.clk, 20)
     # The following assersion is just an example of how to check the output values.
     # Change it to match the actual expected output of your module:
     assert dut.uo_out.value == 0xDA
