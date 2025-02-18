@@ -56,12 +56,12 @@ always @(posedge clk)
 		begin
 			// Reset logic
 			state <= IDLE;
-			A <= 16'bx;
-			B <= 16'bx;
-			result <= 16'bx;
+			A <= 16'b0;
+			B <= 16'b0;
+			result <= 16'b0;
 			byte_count <= 0;
 			processing_done <= 0;
-			uo_out <= 8'bx;
+			uo_out <= 8'b0;
         	end 
         else
         	begin
