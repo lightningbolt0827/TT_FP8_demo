@@ -70,8 +70,8 @@ module tb ();
      
         // **************** TEST CASE 1 ****************  
         // Example Inputs (Floating-Point)
-        A = 16'h0000; //
-        B = 16'h0000; //
+        A = 16'h0101; //
+        B = 16'h0101; //
 
         // Apply Inputs
         for (i = 0; i < 2; i = i + 1) begin
@@ -80,7 +80,7 @@ module tb ();
            #(20);
         end
 
-     #50
+     #70
      
         // **************** TEST CASE 2 ****************  
         // Example Inputs (Floating-Point)
