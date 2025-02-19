@@ -67,23 +67,23 @@ module tt_um_logarithmic_afpm (
 				end
 				PROCESS_1: begin	// Extract sign, exponent, and mantissa for computation
 					byte_count <= 0;
-					Ma[10-1:0] <= A[10-1:0];
-					Ea[5-1:0] <= A[(10 + 5 - 1):10];
-					Sa <= A[(1 + 5 + 10 - 1)];
-					Mb[10-1:0] <= B[10-1:0];
-					Eb[5-1:0] <= B[(10 + 5 - 1):10];
-					Sb <= B[(1 + 5 + 10 - 1)];
+					Ma[9:0] <= A[9:0];
+					Ea[4:0] <= A[14:10];
+					Sa <= A[15];
+					Mb[9:0] <= B[9:0];
+					Eb[5-1:0] <= B[14:10];
+					Sb <= B[15];
 					state <= PROCESS_2;
 				end
 				PROCESS_2: begin
 					Sout <= Sa ^ Sb; 
-					M1aout[10:0] <= Ma[10-1]?(Ma[10-2]?{(Ma+(Ma>>5))}
+					M1aout[10:0] <= Ma[9]?(Ma[8]?{(Ma+(Ma>>5))}
 					:{(Ma+(Ma>>3))})
-					:(Ma[10-2]?{(Ma+(Ma>>2))}
+					:(Ma[8]?{(Ma+(Ma>>2))}
 					:{(Ma+(Ma>>2)+(Ma>>4))});
-					M1bout[10:0] <= Mb[10-1]?(Mb[10-2]?{(Mb+(Mb>>5))}
+					M1bout[10:0] <= Mb[9]?(Mb[8]?{(Mb+(Mb>>5))}
 					:{Mb+(Mb>>3)})
-					:(Mb[10-2]?{(Mb+(Mb>>2))}
+					:(Mb[8]?{(Mb+(Mb>>2))}
 					:{(Mb+(Mb>>2)+(Mb>>4))});
 					state <= PROCESS_3;
 				end
@@ -97,13 +97,13 @@ module tt_um_logarithmic_afpm (
 				end
 				PROCESS_5: begin
 					Eout <= Ea + Eb - 15 + Ce;
-					Mout <= M1addout[10-1] ?
-					(M1addout[10-1:0]+(M1addout[10-1:0]>>3)+(M1addout[10-1:0]>>5)+(M1addout[10-1:0]>>6))+(10'b1101 << 19):
-					((M1addout[10-1:0]>>1)+(M1addout[10-1:0]>>2)+(M1addout[10-1:0]>>4));
+					Mout <= M1addout[9] ?
+					(M1addout[9:0]+(M1addout[9:0]>>3)+(M1addout[9:0]>>5)+(M1addout[9:0]>>6))+(10'b1101 << 19):
+					((M1addout[9:0]>>1)+(M1addout[9:0]>>2)+(M1addout[9:0]>>4));
 					state <= PROCESS_6;
 				end
 				PROCESS_6: begin
-					result <= {Sout, Eout, Mout[10-1:0]};
+					result <= {Sout, Eout, Mout[9:0]};
 					state <= OUTPUT;
 				end
 				OUTPUT: begin
