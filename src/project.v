@@ -42,6 +42,7 @@ module tt_um_logarithmic_afpm (
 	reg [10:0] M1aout;
 	reg [10:0] M1bout;
 	reg [10:0] M1addout;
+	reg Ce;
 
     // Assign unused signals
     //assign uio_out = 0;
@@ -65,7 +66,6 @@ always @(posedge clk)
 		case (state)
 		IDLE: begin
 		    byte_count <= 0;
-		    processing_done <= 0;
 		    if (ui_in!=8'b0) 
 		    begin  // Start signal detected (e.g., LSB=1)
 			state <= COLLECT;
@@ -120,7 +120,6 @@ always @(posedge clk)
 		end
 		PROCESS_6: begin
 			result <= {Sout, Eout, Mout[10-1:0]};
-			processing_done <= 1;
 			state <= OUTPUT;
 		end
 		OUTPUT: begin
