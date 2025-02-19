@@ -29,7 +29,6 @@ module tt_um_logarithmic_afpm (
     reg [15:0] A, B;                // 32-bit registers for operands
     reg [15:0] result;              // 32-bit result register
     reg [1:0] byte_count;           // Counter to track byte collection
-    reg processing_done;            // Flag indicating completion of processing
     
 	reg [10:0] Mout;
 	reg [5-1:0] Eout;
@@ -43,7 +42,6 @@ module tt_um_logarithmic_afpm (
 	reg [10:0] M1aout;
 	reg [10:0] M1bout;
 	reg [10:0] M1addout;
-	reg N1, N2, N3, Ce;
 
     // Assign unused signals
     //assign uio_out = 0;
@@ -60,7 +58,6 @@ always @(posedge clk)
 			B <= 16'b0;
 			result <= 16'b0;
 			byte_count <= 0;
-			processing_done <= 0;
 			uo_out <= 8'b0;
         	end 
         else
@@ -131,8 +128,7 @@ always @(posedge clk)
 			byte_count <= byte_count + 1;
 		    	if(byte_count==1)
 		    	begin
-		             state <= IDLE;
-		             processing_done <= 0;		             
+		             state <= IDLE;		             
 			end
 		end
     		endcase
