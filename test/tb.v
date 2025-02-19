@@ -66,8 +66,7 @@ module tb ();
     rst_n = 0;  
     ui_in_reg = 8'b00000000;
     uio_in_reg = 8'b00000000;
-     #2
-     #18 rst_n = 1; // Release reset after some time
+     #20 rst_n = 1; // Release reset after some time
      
         /**************** TEST CASE 1 ****************  
         // Example Inputs (Floating-Point)
@@ -101,8 +100,8 @@ module tb ();
 
   // Monitor the signals during simulation
 initial begin
-   $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
-   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   $monitor("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   /*#10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
     #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
     #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
     #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
@@ -132,7 +131,7 @@ initial begin
    #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
    #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
    #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
-   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);
+   #10 $display("Time=%0d | ui_in=%b, uio_in=%b | uo_out=%b | rest=%b", $time, ui_in, uio_in, uo_out, rst_n);*/
 end
 
 
