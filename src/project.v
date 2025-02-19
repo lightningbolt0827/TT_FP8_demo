@@ -15,7 +15,7 @@ module tt_um_logarithmic_afpm (
     assign uio_oe  = 8'b00000000;
     wire _unused = &{ena, 1'b0};
     
-   localparam IDLE       = 4'b0000,
+   localparam  IDLE       = 4'b0000,
                COLLECT    = 4'b0001,
                PROCESS_1  = 4'b0011,
                PROCESS_2  = 4'b0010,
