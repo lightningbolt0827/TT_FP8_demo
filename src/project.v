@@ -1,11 +1,11 @@
 `default_nettype none
 
 module tt_um_logarithmic_afpm (
-	input wire [7:0] ui_in,     // 8-bit input
-	input wire [7:0] uio_in,    // IOs: Input path
-	output reg [7:0] uo_out,    // 8-bit output
+	input  wire [7:0] ui_in,    // 8-bit Input
+	input  wire [7:0] uio_in,   // IOs: Input path
+	output wire [7:0] uo_out,   // 8-bit Output
 	output wire [7:0] uio_out,  // IOs: Output path (not used)
-	output wire [7:0] uio_oe,   // IOs: Enable path (not used)
+	output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
 	input  wire       ena,      // Enable signal
 	input  wire       clk,      // Clock signal
 	input  wire       rst_n     // Reset signal
@@ -32,10 +32,10 @@ module tt_um_logarithmic_afpm (
 	reg [15:0] result;              // 32-bit result register
 	reg [1:0] byte_count;           // Counter to track byte collection
 	
-	reg [10:0] Mout, M1aout, M1bout, M1addout;
+	reg [10:0] M1aout, M1bout, M1addout;
 	reg [4:0] Eout, Ea, Eb;
 	reg Sout, Sa, Sb, Ce;
-	reg [9:0] Ma, Mb;
+	reg [9:0] Ma, Mb, Mout;
 	
 	// FSM Implementation
 	always @(posedge clk) 
@@ -77,14 +77,14 @@ module tt_um_logarithmic_afpm (
 				end
 				PROCESS_2: begin
 					Sout <= Sa ^ Sb; 
-					M1aout[10:0] <= Ma[9]?(Ma[8]?{1'b0,(Ma+(Ma>>5))}
-					:{1'b0,(Ma+(Ma>>3))})
-					:(Ma[8]?{1'b0,(Ma+(Ma>>2))}
-					:{1'b0,(Ma+(Ma>>2)+(Ma>>4))});
-					M1bout[10:0] <= Mb[9]?(Mb[8]?{1'b0,(Mb+(Mb>>5))}
-					:{1'b0,Mb+(Mb>>3)})
-					:(Mb[8]?{1'b0,(Mb+(Mb>>2))}
-					:{1'b0,(Mb+(Mb>>2)+(Mb>>4))});
+					M1aout[10:0] <= Ma[9]?(Ma[8]?{1'b0, (Ma+(Ma>>5))}
+					:{1'b0, (Ma+(Ma>>3))})
+					:(Ma[8]?{1'b0, (Ma+(Ma>>2))}
+					:{1'b0, (Ma+(Ma>>2)+(Ma>>4))});
+					M1bout[10:0] <= Mb[9]?(Mb[8]?{1'b0, (Mb+(Mb>>5))}
+					:{1'b0, Mb+(Mb>>3)})
+					:(Mb[8]?{1'b0, (Mb+(Mb>>2))}
+					:{1'b0, (Mb+(Mb>>2)+(Mb>>4))});
 					state <= PROCESS_3;
 				end
 				PROCESS_3: begin
@@ -96,12 +96,12 @@ module tt_um_logarithmic_afpm (
 					state <= PROCESS_5;
 				end
 				PROCESS_5: begin
-					Eout <= Ea + Eb - 15 + {4'b0,Ce};
+					Eout <= Ea + Eb - 15 + {4'b0, Ce};
 					Mout <= M1addout[9] ?
-					({1'b0,(M1addout[9:0]+(M1addout[9:0]>>3)+(M1addout[9:0]>>5)+(M1addout[9:0]>>6))+(10'b1101 << 19)}):
-					  ({1'b0,((M1addout[9:0]>>1)+(M1addout[9:0]>>2)+(M1addout[9:0]>>4))});
+					((M1addout[9:0]+(M1addout[9:0]>>3)+(M1addout[9:0]>>5)+(M1addout[9:0]>>6))+(10'b1101 << 19)):
+					  ((M1addout[9:0]>>1)+(M1addout[9:0]>>2)+(M1addout[9:0]>>4));
 					state <= PROCESS_6;
-				end
+				end 
 				PROCESS_6: begin
 					result <= {Sout, Eout, Mout[9:0]};
 					state <= OUTPUT;
