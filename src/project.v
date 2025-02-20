@@ -110,7 +110,10 @@ module tt_um_logarithmic_afpm (
 					uo_out <= result[byte_count*8 +: 8];
 					byte_count <= byte_count + 1;
 					if(byte_count==1)
-						state <= IDLE;		             
+						state <= IDLE;
+				end
+				default: begin
+					state<=IDLE;
 				end
 			endcase
 		end
