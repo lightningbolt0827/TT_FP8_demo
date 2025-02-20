@@ -3,7 +3,7 @@
 module tt_um_logarithmic_afpm (
 	input  wire [7:0] ui_in,    // 8-bit Input
 	input  wire [7:0] uio_in,   // IOs: Input path
-	output reg  [7:0] uo_out,   // 8-bit Output
+	output wire [7:0] uo_out,   // 8-bit Output
 	output wire [7:0] uio_out,  // IOs: Output path (not used)
 	output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
 	input  wire       ena,      // Enable signal
@@ -26,6 +26,8 @@ module tt_um_logarithmic_afpm (
 		    PROCESS_5  = 4'b0101,
 		    PROCESS_6  = 4'b0100,
 		    OUTPUT     = 4'b1100;
+
+	reg [7:0] out_reg;
 	
 	reg [3:0] state;                // FSM state register
 	reg [15:0] A, B;                // 32-bit registers for operands
@@ -36,6 +38,8 @@ module tt_um_logarithmic_afpm (
 	reg [4:0] Eout, Ea, Eb;
 	reg Sout, Sa, Sb, Ce;
 	reg [9:0] Ma, Mb, Mout;
+
+	assign uo_out = out_reg;
 	
 	// FSM Implementation
 	always @(posedge clk) 
@@ -48,7 +52,7 @@ module tt_um_logarithmic_afpm (
 			B <= 16'b0;
 			result <= 16'b0;
 			byte_count <= 0;
-			uo_out <= 8'b0;
+			out_reg <= 8'b0;
 		end 
 		else
 		begin
@@ -107,7 +111,7 @@ module tt_um_logarithmic_afpm (
 					state <= OUTPUT;
 				end
 				OUTPUT: begin
-					uo_out <= result[byte_count*8 +: 8];
+					out_reg <= result[byte_count*8 +: 8];
 					byte_count <= byte_count + 1;
 					if(byte_count==1)
 						state <= IDLE;
