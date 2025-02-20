@@ -77,14 +77,14 @@ module tt_um_logarithmic_afpm (
 				end
 				PROCESS_2: begin
 					Sout <= Sa ^ Sb; 
-					M1aout[10:0] <= Ma[9]?(Ma[8]?{(Ma+(Ma>>5))}
-					:{(Ma+(Ma>>3))})
-					:(Ma[8]?{(Ma+(Ma>>2))}
-					:{(Ma+(Ma>>2)+(Ma>>4))});
-					M1bout[10:0] <= Mb[9]?(Mb[8]?{(Mb+(Mb>>5))}
-					:{Mb+(Mb>>3)})
-					:(Mb[8]?{(Mb+(Mb>>2))}
-					:{(Mb+(Mb>>2)+(Mb>>4))});
+					M1aout[10:0] <= Ma[9]?(Ma[8]?{1'b0,(Ma+(Ma>>5))}
+					:{1'b0,(Ma+(Ma>>3))})
+					:(Ma[8]?{1'b0,(Ma+(Ma>>2))}
+					:{1'b0,(Ma+(Ma>>2)+(Ma>>4))});
+					M1bout[10:0] <= Mb[9]?(Mb[8]?{1'b0,(Mb+(Mb>>5))}
+					:{1'b0,Mb+(Mb>>3)})
+					:(Mb[8]?{1'b0,(Mb+(Mb>>2))}
+					:{1'b0,(Mb+(Mb>>2)+(Mb>>4))});
 					state <= PROCESS_3;
 				end
 				PROCESS_3: begin
