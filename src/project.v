@@ -96,10 +96,10 @@ module tt_um_logarithmic_afpm (
 					state <= PROCESS_5;
 				end
 				PROCESS_5: begin
-					Eout <= Ea + Eb - 15 + Ce;
+					Eout <= Ea + Eb - 15 + {4'b0,Ce};
 					Mout <= M1addout[9] ?
-					(M1addout[9:0]+(M1addout[9:0]>>3)+(M1addout[9:0]>>5)+(M1addout[9:0]>>6))+(10'b1101 << 19):
-					((M1addout[9:0]>>1)+(M1addout[9:0]>>2)+(M1addout[9:0]>>4));
+					{1'b0,(M1addout[9:0]+(M1addout[9:0]>>3)+(M1addout[9:0]>>5)+(M1addout[9:0]>>6))+(10'b1101 << 19):
+					 ((M1addout[9:0]>>1)+(M1addout[9:0]>>2)+(M1addout[9:0]>>4))};
 					state <= PROCESS_6;
 				end
 				PROCESS_6: begin
