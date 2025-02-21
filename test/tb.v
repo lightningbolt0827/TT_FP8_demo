@@ -91,7 +91,7 @@ module tb ();
         for (i = 0; i < 2; i = i + 1) begin
             ui_in_reg  = A[i*8 +: 8]; 
             uio_in_reg = B[i*8 +: 8]; 
-           #(200);
+           #(20);
         end
 
         // Wait for processing
