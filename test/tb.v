@@ -57,7 +57,7 @@ module tb ();
    
   // Clock generation
   initial begin
-    clk = 0;
+    clk = 1;
     forever #10 clk = ~clk;  
   end
 
@@ -66,7 +66,7 @@ module tb ();
     rst_n = 0;  
     ui_in_reg = 8'b00000000;
     uio_in_reg = 8'b00000000;
-     #20 rst_n = 1; // Release reset after some time
+     #5 rst_n = 1; // Release reset after some time
      
         /**************** TEST CASE 1 ****************  
         // Example Inputs (Floating-Point)
@@ -84,8 +84,8 @@ module tb ();
      
         // **************** TEST CASE 2 ****************  
         // Example Inputs (Floating-Point)
-        A = 16'h4871; //
-        B = 16'h482E; //
+        A = 16'h3E00; //
+        B = 16'h4200; //
 
         // Apply Inputs
         for (i = 0; i < 2; i = i + 1) begin
