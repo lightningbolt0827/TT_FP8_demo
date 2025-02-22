@@ -33,7 +33,7 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 1)
     
     dut.ui_in.value = 0x48
-    dut.uio_in.value = 0x37
+    dut.uio_in.value = 0x3F
 
     await ClockCycles(dut.clk, 11)
     # The following assersion is just an example of how to check the output values.
