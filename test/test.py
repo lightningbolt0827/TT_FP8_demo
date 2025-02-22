@@ -12,7 +12,7 @@ async def test_project(dut):
 
     # Manually set clk to 0 before starting the clock
     dut.clk.value = 0  # Ensure initial state is LOW
-
+    await Timer(10, units="ns")
     # Set the clock period to 10 ns (100 MHz)
     clock = Clock(dut.clk, 20, units="ns")
     cocotb.start_soon(clock.start())
