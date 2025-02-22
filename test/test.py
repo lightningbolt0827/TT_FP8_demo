@@ -10,6 +10,9 @@ from cocotb.triggers import Timer
 async def test_project(dut):
     dut._log.info("Start")
 
+    # Manually set clk to 0 before starting the clock
+    dut.clk.value = 0  # Ensure initial state is LOW
+
     # Set the clock period to 10 ns (100 MHz)
     clock = Clock(dut.clk, 20, units="ns")
     cocotb.start_soon(clock.start())
