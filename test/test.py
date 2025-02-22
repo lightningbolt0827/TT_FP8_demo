@@ -11,7 +11,7 @@ async def test_project(dut):
     dut._log.info("Start")
 
     # Set the clock period to 10 ns (100 MHz)
-    clock = Clock(dut.clk, 20, units="ns", phase=0)
+    clock = Clock(dut.clk, 20, units="ns")
     cocotb.start_soon(clock.start())
 
     # Reset
@@ -20,7 +20,8 @@ async def test_project(dut):
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 1)
+    #await ClockCycles(dut.clk, 1)
+    await Timer(5, units="ns")
     dut.rst_n.value = 1
 
     dut._log.info("Test project behavior")
@@ -30,12 +31,13 @@ async def test_project(dut):
     dut.uio_in.value = 0x2E
 
     # Wait for one clock cycle to see the output values
-    await ClockCycles(dut.clk, 1)
-    
+    #await ClockCycles(dut.clk, 1)
+    await Timer(20, units="ns")
     dut.ui_in.value = 0x48
     dut.uio_in.value = 0x48
 
-    await ClockCycles(dut.clk, 11)
+    #await ClockCycles(dut.clk, 11)
+    await Timer(220, units="ns")
     # The following assersion is just an example of how to check the output values.
     # Change it to match the actual expected output of your module:
     assert dut.uo_out.value == 0xA6
