@@ -41,7 +41,7 @@ async def test_project(dut):
     dut.uio_in.value = 0x48
 
     #await ClockCycles(dut.clk, 11)
-    await Timer(180, units="ns")
+    await Timer(160, units="ns")
     # The following assersion is just an example of how to check the output values.
     # Change it to match the actual expected output of your module:
     assert dut.uo_out.value == 0x2C
