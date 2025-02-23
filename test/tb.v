@@ -86,7 +86,7 @@ module tb ();
         // Example Inputs (Floating-Point)
         A = 16'h44DF; //
         B = 16'h483D; //
-         #20
+         #40
         // Apply Inputs
         for (i = 0; i < 2; i = i + 1) begin
             ui_in_reg  = A[i*8 +: 8]; 
