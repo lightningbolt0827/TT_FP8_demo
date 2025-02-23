@@ -27,9 +27,9 @@ async def test_project(dut):
     #await ClockCycles(dut.clk, 1)
     await Timer(10, units="ns")
     dut.rst_n.value = 1
-
+    
     dut._log.info("Test project behavior")
-
+    await Timer(20, units="ns")
     # Set the input values you want to test
     dut.ui_in.value = 0xDF
     dut.uio_in.value = 0x3D
